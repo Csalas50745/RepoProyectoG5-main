@@ -1,0 +1,18 @@
+<?php
+namespace Ext\Model;
+use Ext\Core\Db;
+use PDO;
+
+final class Producto {
+  public static function list(int $limit=20,int $offset=0): array {
+    $stm = Db::pdo()->prepare("
+      SELECT id_producto,nombre,descripcion,precio,stock,id_categoria
+      FROM producto ORDER BY id_producto DESC
+      LIMIT :lim OFFSET :off
+    ");
+    $stm->bindValue(':lim',$limit,PDO::PARAM_INT);
+    $stm->bindValue(':off',$offset,PDO::PARAM_INT);
+    $stm->execute();
+    return $stm->fetchAll();
+  }
+}
